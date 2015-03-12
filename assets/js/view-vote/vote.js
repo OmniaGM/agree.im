@@ -8,49 +8,67 @@ define([ 'require',
   angular
     .module("viewVote", [
     	"firebase",
-    	"voteFactoryModule",
-      "usersFactoryModule"
-    ])
-    .controller("voteViewCtrl",
-      function(
-        $scope,
-        $firebase,
-        $routeParams,
-        User,
-        Vote
-      ) {
+      "usersFactoryModule",
+      "voteFactoryModule"
+      ])
+    .controller("voteViewCtrl",[
+        "$scope",
+        "$document",
+        "$firebase",
+        "$routeParams",
+        "User",
+        "Vote",
+        function(
+          $scope,
+          $document,
+          $firebase,
+          $routeParams,
+          User,
+          Vote
+        ) {
 
-        $scope.slug = $routeParams.slug;
-        var authPromise = User().catch(function(error){
-          $scope.authError = error;
-        });
-
-        Vote($scope.slug).$loaded()
-        .then(
-          function (vote) {
-            $scope.vote = vote
-            document.title += " - " + $scope.vote.title
-            $scope.isMulti = vote.mode === 'multi'
-            $scope.notFound = !$scope.vote.$value
-          }
-        )
-        $scope.voteMe = function () {
-          authPromise.then(function(voterId){
-            $scope.vote.voteForThis($scope.selected, voterId);
+          $scope.slug = $routeParams.slug;
+          var authPromise = User().catch(function(error){
+            $scope.errorHappened = "Authentication Error";
           });
-        };
 
-
-        $scope.getVotersDetails = function(index) {
-          var votersDetails = $scope.vote.getVotersDetails(index)
-          return {
-            votersAgree: votersDetails.agreeSize,
-            votersCount: votersDetails.totalSize,
-            percent: {
-              width: votersDetails.percent  + "%"
+          var votePromise = Vote($scope.slug).then(
+            function (vote) {
+              $scope.vote = vote
+              $document[0].title += " - " + $scope.vote.title
+              $scope.isMulti = vote.mode === 'multi'
+              $scope.notFound = !$scope.vote.$value
+              if ($scope.notFound) $scope.errorHappened = "404"
+            },
+            function(error) {
+              $scope.errorHappened = "Opps, there is an error happened";
             }
-          }
-        };
-      }
+          )
+
+          $scope.voteMe = function () {
+            authPromise.then(function(voterId){
+              $scope.vote.voteForThis($scope.selected, voterId);
+            });
+          };
+          $scope.getTotalVoters = function() {
+            if ($scope.vote) {
+              return $scope.vote.getTotalVoters()
+            }
+          };
+          $scope.getVotersDetails = function(index) {
+            if ($scope.vote) {
+              var votersDetails = $scope.vote.getVotersDetails(index)
+              return {
+                votersAgree: votersDetails.agreeSize,
+                percent: {
+                  width: votersDetails.percent  + "%"
+                }
+              }
+            }
+          };
+        }
+
+      ]
+
     );
 });

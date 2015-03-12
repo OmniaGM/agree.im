@@ -33,13 +33,12 @@
 			</tr>
 		</tbody>
 	</table>
-	<em><strong>{{getVotersDetails(0).votersCount}}</strong> agreed on this!</em>
+	<em><strong ng-bind='getTotalVoters()'></strong> agreed on this!</em>
 </div>
 
 <div ng-hide="vote.options" class="js-empty-slate">
   <span ng-if="!notFound"
 	      class="glyphicon glyphicon-refresh spin fs-50">
 	</span>
-	<span ng-if="notFound">404</span>
-	<span ng-if="authError">Authentication Error</span>
+	<span ng-if="errorHappened">{{errorHappened}}</span>
 </div>
