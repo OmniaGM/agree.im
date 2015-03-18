@@ -9,7 +9,10 @@ define(['require',
     'firebase',
     'voteFireRefServiceModule'
     ])
-    .factory("Vote",
+    .factory('Vote',[
+      '$FirebaseObject',
+      '$firebase',
+      'voteFireRef',
       function(
         $FirebaseObject,
         $firebase,
@@ -36,7 +39,7 @@ define(['require',
             });
             vote.$save();
           },
-          
+
           getTotalVoters: function() {
             var vote = this,
                 totalVoters = 0,
@@ -63,17 +66,17 @@ define(['require',
             }
 
             return {
-              "agreeSize": agreeSize,
-              "percent": totalVoters !== 0 ? (agreeSize/ totalVoters) * 100 : 0
+              'agreeSize': agreeSize,
+              'percent': totalVoters !== 0 ? (agreeSize/ totalVoters) * 100 : 0
             }
           }
         });
         return function(slug) {
-          var ref = voteFireRef().child("v/" + slug),
+          var ref = voteFireRef().child('v/' + slug),
               sync = $firebase(ref, { objectFactory: VoteFactory });
 
           return sync.$asObject().$loaded();
         }
       }
-    )
+    ])
 });

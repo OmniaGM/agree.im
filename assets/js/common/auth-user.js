@@ -9,7 +9,10 @@ define(['require',
       'firebase',
       'voteFireRefServiceModule'
       ])
-      .factory("User",
+      .factory('User',[
+        '$firebase',
+        'voteFireRef',
+        '$q',
         function(
           $firebase,
           voteFireRef,
@@ -33,5 +36,5 @@ define(['require',
             return deferred.promise;
           }
         }
-      )
+      ])
 });

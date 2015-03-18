@@ -7,11 +7,13 @@ define(['require',
     .module('voteFireRefServiceModule', [
       'firebase'
     ])
-    .factory('voteFireRef',
+    .factory('voteFireRef',[
+      '$firebase',
       function($firebase) {
         return function() {
           var url = 'https://votenow.firebaseio.com/';
           return new Firebase(url);
        };
-     });
+      }
+     ]);
   });

@@ -1,15 +1,15 @@
-"use strict";
+'use strict';
 define([ 'require',
          'angular',
          'angularfire',
          'common/firebase-service'], function(require) {
 
   return angular
-  .module("createVote", [
-  	"firebase",
-  	"voteFireRefServiceModule"
+  .module('createVote', [
+  	'firebase',
+  	'voteFireRefServiceModule'
   ]).
-  controller("createVoteCtrl", [
+  controller('createVoteCtrl', [
     '$scope',
     '$firebase',
     'voteFireRef',
@@ -18,13 +18,13 @@ define([ 'require',
       $firebase,
       voteFireRef
     ) {
-      var votes = voteFireRef().child("v");
-      $scope.title = "My Vote";
-      $scope.slug = "vote-1";
-      $scope.mode = "single";
+      var votes = voteFireRef().child('v');
+      $scope.title = 'My Vote';
+      $scope.slug = 'vote-1';
+      $scope.mode = 'single';
       $scope.options = [
-        {"text": "Option 1"},
-        {"text": "Option 2"}
+        {'text': 'Option 1'},
+        {'text': 'Option 2'}
       ];
 
       $scope.check = function(){
@@ -36,10 +36,10 @@ define([ 'require',
       }
 
       var createResult = function(vote) {
-        var results = $firebase(voteFireRef().child("r"));
+        var results = $firebase(voteFireRef().child('r'));
         return results.$push({
-          "voteId": vote.$id,
-          "results": vote.options
+          'voteId': vote.$id,
+          'results': vote.options
         });
       }
 
@@ -47,7 +47,7 @@ define([ 'require',
         var promise = $firebase(votes.child($scope.slug)).$asObject().$loaded();
         promise.then(function(vote){
           if (exists(vote)) {
-            console.log("already exists!!")
+            console.log('already exists!!')
             return
           }
           vote.title = $scope.title;
@@ -57,11 +57,11 @@ define([ 'require',
             vote.resultId = result.key();
             vote.$save();
             $scope.vote = vote;
-            console.log("saved");
+            console.log('saved');
           });
         });
         promise.catch(function(error){
-          console.log("error")
+          console.log('error')
         });
       };
     }

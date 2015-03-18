@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 define([ 'require',
          'angular',
          'angularfire',
@@ -6,18 +6,18 @@ define([ 'require',
          'common/auth-user'], function(require) {
 
   angular
-    .module("viewVote", [
-    	"firebase",
-      "usersFactoryModule",
-      "voteFactoryModule"
+    .module('viewVote', [
+    	'firebase',
+      'usersFactoryModule',
+      'voteFactoryModule'
       ])
-    .controller("voteViewCtrl",[
-        "$scope",
-        "$document",
-        "$firebase",
-        "$routeParams",
-        "User",
-        "Vote",
+    .controller('voteViewCtrl',[
+        '$scope',
+        '$document',
+        '$firebase',
+        '$routeParams',
+        'User',
+        'Vote',
         function(
           $scope,
           $document,
@@ -29,19 +29,19 @@ define([ 'require',
 
           $scope.slug = $routeParams.slug;
           var authPromise = User().catch(function(error){
-            $scope.errorHappened = "Authentication Error";
+            $scope.errorHappened = 'Authentication Error';
           });
 
           var votePromise = Vote($scope.slug).then(
             function (vote) {
               $scope.vote = vote
-              $document[0].title += " - " + $scope.vote.title
+              $document[0].title += ' - ' + $scope.vote.title
               $scope.isMulti = vote.mode === 'multi'
               $scope.notFound = !$scope.vote.$value
-              if ($scope.notFound) $scope.errorHappened = "404"
+              if ($scope.notFound) $scope.errorHappened = '404'
             },
             function(error) {
-              $scope.errorHappened = "Opps, there is an error happened";
+              $scope.errorHappened = 'Opps, there is an error happened';
             }
           )
 
@@ -61,7 +61,7 @@ define([ 'require',
               return {
                 votersAgree: votersDetails.agreeSize,
                 percent: {
-                  width: votersDetails.percent  + "%"
+                  width: votersDetails.percent  + '%'
                 }
               }
             }
